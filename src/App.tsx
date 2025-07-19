@@ -1,11 +1,6 @@
+import { RouterProvider } from "react-router";
+import { privateRoutes } from "./routes/privateRoutes";
 
-function App() {
-
-  return (
-    <>
-      <h1>Home</h1>
-    </>
-  )
-}
-
-export default App
+export const App = () => {
+	return <RouterProvider router={privateRoutes}></RouterProvider>;
+};
