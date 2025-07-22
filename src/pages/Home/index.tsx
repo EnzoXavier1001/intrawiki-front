@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Header } from "../../components/Header";
 import { Post } from "../../components/Post";
 import { api } from "../../services/endpoint";
 import type { IPost } from "../../@types/Post";
@@ -27,7 +26,6 @@ export const Home = () => {
 
 	return (
 		<div className="bg-gray-100 overflow-x-hidden">
-			<Header />
 			<div className="px-6 py-8">
 				<div className="flex justify-between container mx-auto">
 					<div className="w-full lg:w-8/12">

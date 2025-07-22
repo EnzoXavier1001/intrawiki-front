@@ -1,15 +1,21 @@
 import { Link, useParams } from "react-router";
-import { Header } from "../../components/Header";
 import { useEffect, useState } from "react";
 import { api } from "../../services/endpoint";
 import type { IUser } from "../../@types/User";
-import { Cake, GithubLogo, LinkedinLogo } from "@phosphor-icons/react";
+import { GithubLogo, LinkedinLogo } from "@phosphor-icons/react";
 import { formatDate } from "../../utils/formatDate";
+import { Modal } from "../../components/Modal";
+import { badgeData } from "../../constants/badgeData";
 
 export const Profile = () => {
 	const { id } = useParams();
 	const [user, setUser] = useState<IUser>();
 	const [userPosts, setUserPosts] = useState([]);
+	const [activeBadge, setActiveBadge] = useState<null | {
+		badge: string;
+		title: string;
+		text: string;
+	}>(null);
 
 	useEffect(() => {
 		getUser();
@@ -20,10 +26,10 @@ export const Profile = () => {
 		try {
 			const { data } = await api.get(`/users/${id}`, {
 				headers: {
-					Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzcwOWU3ZDJjMjNhZDEyYWM4MzM5ZCIsImlhdCI6MTc1Mjk2MDQyOX0.pnq0Vl4wc7knOBGMXQMLnBbqSKhrZ95OcIm5PIuTuY0`,
+					Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4N2MzZTJkNWRkOTAxOGQ2NzcwZWE0MyIsImlhdCI6MTc1MzE1MDM1OX0.8s7ztwWifcBGdSn16MSah7WOFCtlLfVD6gaU2nFUFOY`,
 				},
 			});
-
+			console.log(data);
 			setUser(data);
 		} catch (error) {
 			console.error(error);
@@ -34,15 +40,10 @@ export const Profile = () => {
 		try {
 			const { data } = await api.get("/posts/search", {
 				headers: {
-					Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzcwOWU3ZDJjMjNhZDEyYWM4MzM5ZCIsImlhdCI6MTc1Mjk2MDQyOX0.pnq0Vl4wc7knOBGMXQMLnBbqSKhrZ95OcIm5PIuTuY0`,
+					Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4N2MzZTJkNWRkOTAxOGQ2NzcwZWE0MyIsImlhdCI6MTc1MzE1MDM1OX0.8s7ztwWifcBGdSn16MSah7WOFCtlLfVD6gaU2nFUFOY`,
 				},
-				params: {
-					id,
-				},
+				params: { id },
 			});
-
-			console.log(data);
-
 			setUserPosts(data);
 		} catch (error) {
 			console.error(error);
@@ -51,14 +52,13 @@ export const Profile = () => {
 
 	return (
 		<>
-			<Header />
 			<div className="bg-gray-100 min-h-screen">
-				<div className="bg-black w-full h-64"></div>
+				<div className="w-full h-64 bg-gradient-to-r from-indigo-600 to-purple-600" />
 
 				<div className="bg-white -mt-40 pb-6 rounded-lg shadow-md max-w-4xl w-full mx-auto flex flex-col items-center px-4 sm:px-6">
 					<img
 						className="w-32 h-32 rounded-full object-cover -mt-16"
-						src="https://media2.dev.to/dynamic/image/width=320,height=320,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Fuser%2Fprofile_image%2F2410234%2Fe32c3997-3183-4f88-8c74-922955a238b9.jpg"
+						src="https://media.licdn.com/dms/image/v2/D4D03AQEfHmk-4dEpSA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1686099424971?e=1756339200&v=beta&t=U1KRS34w_tO5DXFyL5M8_3NoHtKYlB-mFDK94myiRfw"
 						alt={user?.name}
 					/>
 					<h1 className="mt-4 text-xl font-semibold text-center">
@@ -68,54 +68,78 @@ export const Profile = () => {
 						{user?.biography}
 					</p>
 					<div className="flex items-center gap-4">
-						<Link to={user?.linkedin} target="_blank" rel="noopener noreferrer">
-							<LinkedinLogo size={24} />
-						</Link>
-						<GithubLogo size={24} />
+						{user?.linkedin && (
+							<Link
+								to={user.linkedin}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<LinkedinLogo size={24} />
+							</Link>
+						)}
+						{user?.github && <GithubLogo size={24} />}
 					</div>
+
 					<div className="flex flex-col sm:flex-row items-center justify-around mt-5 w-full border-t border-gray-300 p-3 space-y-4 sm:space-y-0">
 						<div>
 							<h2 className="text-center text-gray-500 font-semibold">
 								Departamento
 							</h2>
-							<p className="text-center">Platform - Global Team</p>
+							<p className="text-center">E-Store</p>
 						</div>
 						<div>
 							<h2 className="text-center text-gray-500 font-semibold">Cargo</h2>
 							<p className="text-center">Publisher</p>
 						</div>
 					</div>
+
+					{user?.badges?.length > 0 && (
+						<div className="flex flex-wrap justify-center gap-4 items-center mt-4">
+							{user.badges.map((badge, index) => {
+								const data = badgeData[badge.badgeId];
+								if (!data) return null;
+
+								return (
+									<img
+										key={index}
+										src={data.image}
+										alt={data.title}
+										className="w-[60px] cursor-pointer"
+										onClick={() =>
+											setActiveBadge({
+												badge: data.image,
+												title: data.title,
+												text: data.text,
+											})
+										}
+									/>
+								);
+							})}
+						</div>
+					)}
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-2 mt-5 gap-6 pb-6 rounded-lg max-w-4xl w-full mx-auto px-4 sm:px-6">
-					{/* Coluna esquerda - hobbies + habilidades */}
 					<div className="flex flex-col space-y-6">
-						{/* Hobbies */}
 						<div className="bg-white p-6 rounded-lg shadow">
 							<h2 className="text-xl font-semibold mb-4">Hobbies</h2>
 							<ul className="list-disc list-inside space-y-2 text-gray-700">
-								<li>Fotografia</li>
-								<li>Leitura</li>
-								<li>Jardinagem</li>
-								<li>Esportes</li>
+								{user?.hobbies?.map((hobby, index) => (
+									<li key={index}>{hobby}</li>
+								))}
 							</ul>
 						</div>
 
-						{/* Habilidades */}
 						<div className="bg-white p-6 rounded-lg shadow">
 							<h2 className="text-xl font-semibold mb-4">Skills/Languages</h2>
 							<ul className="list-disc list-inside space-y-2 text-gray-700">
-								<li>JavaScript</li>
-								<li>Java</li>
-								<li>React</li>
-								<li>TypeScript</li>
-								<li>C++</li>
-								<li>Go</li>
+								{user?.skills?.map((skill, index) => (
+									<li key={index}>{skill}</li>
+								))}
 							</ul>
 						</div>
 					</div>
 
-					{/* Coluna direita - posts */}
 					<div className="bg-white p-6 rounded-lg shadow max-w-full mx-auto">
 						<h2 className="text-2xl font-semibold mb-6 border-b border-gray-300 pb-2">
 							Posts Recentes
@@ -138,9 +162,13 @@ export const Profile = () => {
 											</p>
 										</div>
 									</div>
-									<h3 className="mt-3 text-lg font-semibold text-gray-800 cursor-pointer hover:text-indigo-600">
-										{post.title}
-									</h3>
+									<Link to={`/post/${post._id}`}>
+										{" "}
+										<h3 className="mt-3 text-lg font-semibold text-gray-800 cursor-pointer hover:text-indigo-600">
+											{post.title}
+										</h3>
+									</Link>
+
 									<div className="mt-2 flex flex-wrap gap-2">
 										{post.tags.map((tag, i) => (
 											<span
@@ -156,6 +184,15 @@ export const Profile = () => {
 						</ul>
 					</div>
 				</div>
+
+				{activeBadge && (
+					<Modal
+						badge={activeBadge.badge}
+						onCloseModal={() => setActiveBadge(null)}
+						title={activeBadge.title}
+						text={activeBadge.text}
+					/>
+				)}
 			</div>
 		</>
 	);

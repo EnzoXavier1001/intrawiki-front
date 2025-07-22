@@ -9,4 +9,5 @@ export interface IUser {
 	github?: string;
 	hobbies?: string[];
 	createdAt: string;
+	badges: string[];
 }
