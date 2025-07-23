@@ -94,7 +94,7 @@ export const Profile = () => {
 					</div>
 
 					{user?.badges?.length > 0 && (
-						<div className="flex flex-wrap justify-center gap-4 items-center mt-4">
+						<div className="flex flex-wrap justify-center gap-4 items-center mt-4 border border-gray-400 rounded-lg p-4">
 							{user.badges.map((badge, index) => {
 								const data = badgeData[badge.badgeId];
 								if (!data) return null;

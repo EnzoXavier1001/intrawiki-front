@@ -2,9 +2,17 @@ import { useEffect, useState } from "react";
 import { Post } from "../../components/Post";
 import { api } from "../../services/endpoint";
 import type { IPost } from "../../@types/Post";
+import {
+	Cpu,
+	ShoppingCart,
+	AppWindow,
+	UsersFour,
+	MagnifyingGlass,
+} from "@phosphor-icons/react";
 
 export const Home = () => {
 	const [posts, setPosts] = useState<IPost[]>([]);
+	const [search, setSearch] = useState("");
 
 	useEffect(() => {
 		loadPosts();
@@ -16,8 +24,9 @@ export const Home = () => {
 				headers: {
 					Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzcwOWU3ZDJjMjNhZDEyYWM4MzM5ZCIsImlhdCI6MTc1Mjk2MDQyOX0.pnq0Vl4wc7knOBGMXQMLnBbqSKhrZ95OcIm5PIuTuY0`,
 				},
+				params: { search },
 			});
-
+			console.log(data);
 			setPosts(data);
 		} catch (error) {
 			console.error(error);
@@ -25,223 +34,136 @@ export const Home = () => {
 	}
 
 	return (
-		<div className="bg-gray-100 overflow-x-hidden">
-			<div className="px-6 py-8">
-				<div className="flex justify-between container mx-auto">
-					<div className="w-full lg:w-8/12">
-						<div className="flex items-center justify-between">
-							<h1 className="text-xl font-bold text-gray-700 md:text-2xl">
-								Post
-							</h1>
-							<div>
-								<select className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-									<option>Latest</option>
-									<option>Last Week</option>
-								</select>
-							</div>
+		<div className="bg-gray-100 min-h-screen">
+			<div className="container mx-auto px-4 py-8">
+				<div className="grid grid-cols-12 gap-6">
+					{/* SIDEBAR */}
+					<aside className="hidden lg:flex lg:col-span-2 flex-col space-y-2">
+						<button className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition">
+							<Cpu size={22} />
+							<span>TI</span>
+						</button>
+						<button className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition">
+							<ShoppingCart size={22} />
+							<span>VTEX</span>
+						</button>
+						<button className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition">
+							<AppWindow size={22} />
+							<span>AEM</span>
+						</button>
+						<button className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition">
+							<UsersFour size={22} />
+							<span>RH</span>
+						</button>
+					</aside>
+
+					{/* FEED */}
+					<main className="col-span-12 lg:col-span-7">
+						{/* SEARCHBAR */}
+						<div className="flex items-center bg-white rounded-lg shadow px-3 py-2 mb-5">
+							<MagnifyingGlass size={22} className="text-gray-400 mr-2" />
+							<input
+								type="text"
+								placeholder="Buscar posts..."
+								value={search}
+								onChange={(e) => setSearch(e.target.value)}
+								className="w-full outline-none text-gray-700"
+							/>
 						</div>
 
-						{posts.map((post) => (
-							<Post key={post._id} post={post} />
-						))}
-					</div>
-					<div className="-mx-8 w-4/12 hidden lg:block">
-						<div className="px-8">
-							<h1 className="mb-4 text-xl font-bold text-gray-700">Authors</h1>
-							<div className="flex flex-col bg-white max-w-sm px-6 py-4 mx-auto rounded-lg shadow-md">
-								<ul className="-mx-4">
-									<li className="flex items-center">
-										<img
-											src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=731&amp;q=80"
-											alt="avatar"
-											className="w-10 h-10 object-cover rounded-full mx-4"
-										/>
-										<p>
-											<a
-												href="#"
-												className="text-gray-700 font-bold mx-1 hover:underline"
-											>
-												Alex John
-											</a>
-											<span className="text-gray-700 text-sm font-light">
-												Created 23 Posts
+						{/* POSTS */}
+						<div className="space-y-4">
+							{posts.map((post) => (
+								<Post key={post._id} post={post} />
+							))}
+						</div>
+					</main>
+
+					{/* WIDGETS */}
+					<aside className="hidden lg:block lg:col-span-3 space-y-6">
+						<aside className="hidden lg:block lg:col-span-3 space-y-6">
+							<div className="bg-white p-4 rounded-lg shadow">
+								<h2 className="text-lg font-semibold mb-4">
+									Usuários mais populares
+								</h2>
+								<ul className="space-y-3">
+									<li className="flex items-center justify-between">
+										<div className="flex items-center">
+											<img
+												src="https://i.pravatar.cc/30"
+												alt="User"
+												className="w-8 h-8 rounded-full mr-2"
+											/>
+											<span className="font-medium text-gray-800">
+												Nimra Corrigan
 											</span>
-										</p>
+										</div>
+										<span className="text-sm text-gray-600">10 posts</span>
 									</li>
-									<li className="flex items-center mt-6">
-										<img
-											src="https://images.unsplash.com/photo-1464863979621-258859e62245?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=333&amp;q=80"
-											alt="avatar"
-											className="w-10 h-10 object-cover rounded-full mx-4"
-										/>
-										<p>
-											<a
-												href="#"
-												className="text-gray-700 font-bold mx-1 hover:underline"
-											>
-												Jane Doe
-											</a>
-											<span className="text-gray-700 text-sm font-light">
-												Created 52 Posts
+									<li className="flex items-center justify-between">
+										<div className="flex items-center">
+											<img
+												src="https://i.pravatar.cc/30?img=2"
+												alt="User"
+												className="w-8 h-8 rounded-full mr-2"
+											/>
+											<span className="font-medium text-gray-800">
+												Lucas Silva
 											</span>
-										</p>
+										</div>
+										<span className="text-sm text-gray-600">7 posts</span>
 									</li>
-									<li className="flex items-center mt-6">
-										<img
-											src="https://images.unsplash.com/photo-1531251445707-1f000e1e87d0?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=281&amp;q=80"
-											alt="avatar"
-											className="w-10 h-10 object-cover rounded-full mx-4"
-										/>
-										<p>
-											<a
-												href="#"
-												className="text-gray-700 font-bold mx-1 hover:underline"
-											>
-												Lisa Way
-											</a>
-											<span className="text-gray-700 text-sm font-light">
-												Created 73 Posts
+									<li className="flex items-center justify-between">
+										<div className="flex items-center">
+											<img
+												src="https://i.pravatar.cc/30?img=3"
+												alt="User"
+												className="w-8 h-8 rounded-full mr-2"
+											/>
+											<span className="font-medium text-gray-800">
+												Bruna Rocha
 											</span>
-										</p>
-									</li>
-									<li className="flex items-center mt-6">
-										<img
-											src="https://images.unsplash.com/photo-1500757810556-5d600d9b737d?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=735&amp;q=80"
-											alt="avatar"
-											className="w-10 h-10 object-cover rounded-full mx-4"
-										/>
-										<p>
-											<a
-												href="#"
-												className="text-gray-700 font-bold mx-1 hover:underline"
-											>
-												Steve Matt
-											</a>
-											<span className="text-gray-700 text-sm font-light">
-												Created 245 Posts
-											</span>
-										</p>
-									</li>
-									<li className="flex items-center mt-6">
-										<img
-											src="https://images.unsplash.com/photo-1502980426475-b83966705988?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=373&amp;q=80"
-											alt="avatar"
-											className="w-10 h-10 object-cover rounded-full mx-4"
-										/>
-										<p>
-											<a
-												href="#"
-												className="text-gray-700 font-bold mx-1 hover:underline"
-											>
-												Khatab Wedaa
-											</a>
-											<span className="text-gray-700 text-sm font-light">
-												Created 332 Posts
-											</span>
-										</p>
+										</div>
+										<span className="text-sm text-gray-600">5 posts</span>
 									</li>
 								</ul>
 							</div>
-						</div>
-						<div className="mt-10 px-8">
-							<h1 className="mb-4 text-xl font-bold text-gray-700">
-								Categories
-							</h1>
-							<div className="flex flex-col bg-white px-4 py-6 max-w-sm mx-auto rounded-lg shadow-md">
-								<ul>
-									<li>
-										<a
-											href="#"
-											className="text-gray-700 font-bold mx-1 hover:text-gray-600 hover:underline"
-										>
-											- AWS
-										</a>
-									</li>
-									<li className="mt-2">
-										<a
-											href="#"
-											className="text-gray-700 font-bold mx-1 hover:text-gray-600 hover:underline"
-										>
-											- Laravel
-										</a>
-									</li>
-									<li className="mt-2">
-										<a
-											href="#"
-											className="text-gray-700 font-bold mx-1 hover:text-gray-600 hover:underline"
-										>
-											- Vue
-										</a>
-									</li>
-									<li className="mt-2">
-										<a
-											href="#"
-											className="text-gray-700 font-bold mx-1 hover:text-gray-600 hover:underline"
-										>
-											- Design
-										</a>
-									</li>
-									<li className="flex items-center mt-2">
-										<a
-											href="#"
-											className="text-gray-700 font-bold mx-1 hover:text-gray-600 hover:underline"
-										>
-											- Django
-										</a>
-									</li>
-									<li className="flex items-center mt-2">
-										<a
-											href="#"
-											className="text-gray-700 font-bold mx-1 hover:text-gray-600 hover:underline"
-										>
-											- PHP
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<div className="mt-10 px-8">
-							<h1 className="mb-4 text-xl font-bold text-gray-700">
-								Recent Post
-							</h1>
-							<div className="flex flex-col bg-white px-8 py-6 max-w-sm mx-auto rounded-lg shadow-md">
-								<div className="flex justify-center items-center">
-									<a
-										href="#"
-										className="px-2 py-1 bg-gray-600 text-sm text-green-100 rounded hover:bg-gray-500"
-									>
-										Laravel
-									</a>
-								</div>
-								<div className="mt-4">
-									<a
-										href="#"
-										className="text-lg text-gray-700 font-medium hover:underline"
-									>
-										Build Your New Idea with Laravel Freamwork.
-									</a>
-								</div>
-								<div className="flex justify-between items-center mt-4">
-									<div className="flex items-center">
-										<img
-											src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=731&amp;q=80"
-											alt="avatar"
-											className="w-8 h-8 object-cover rounded-full"
-										/>
-										<a
-											href="#"
-											className="text-gray-700 text-sm mx-3 hover:underline"
-										>
-											Alex John
-										</a>
+						</aside>
+
+						{/* Eventos */}
+						<div className="bg-white p-4 rounded-lg shadow">
+							<h2 className="text-lg font-semibold mb-4">Próximos Eventos</h2>
+							<ul className="space-y-3">
+								<li className="flex justify-between items-center hover:bg-gray-100 rounded px-2 py-1">
+									<div>
+										<p className="text-gray-800 font-medium">Treinamento AEM</p>
+										<p className="text-sm text-gray-500">15 Ago 2025</p>
 									</div>
-									<span className="font-light text-sm text-gray-600">
-										Jun 1, 2020
+									<span className="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full">
+										Online
 									</span>
-								</div>
-							</div>
+								</li>
+								<li className="flex justify-between items-center hover:bg-gray-100 rounded px-2 py-1">
+									<div>
+										<p className="text-gray-800 font-medium">Workshop VTEX</p>
+										<p className="text-sm text-gray-500">20 Ago 2025</p>
+									</div>
+									<span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">
+										Presencial
+									</span>
+								</li>
+								<li className="flex justify-between items-center hover:bg-gray-100 rounded px-2 py-1">
+									<div>
+										<p className="text-gray-800 font-medium">Reunião RH</p>
+										<p className="text-sm text-gray-500">25 Ago 2025</p>
+									</div>
+									<span className="bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded-full">
+										Híbrido
+									</span>
+								</li>
+							</ul>
 						</div>
-					</div>
+					</aside>
 				</div>
 			</div>
 		</div>
