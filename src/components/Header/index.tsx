@@ -10,7 +10,7 @@ export const Header = () => {
 							className="text-gray-800 text-xl font-bold md:text-2xl"
 							to="/"
 						>
-							Brand
+							Cheil
 						</Link>
 					</div>
 					<div>
@@ -35,7 +35,7 @@ export const Header = () => {
 						href="#"
 						className="my-1 text-gray-800 hover:text-blue-500 md:mx-4 md:my-0"
 					>
-						Blog
+						Eventos
 					</a>
 					<a
 						href="#"
