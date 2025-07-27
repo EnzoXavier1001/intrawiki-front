@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 import { getPostById } from "../../api/post";
 
 import type { IPost } from "../../@types/Post";
+import { MarkdownRenderer } from "../../components/MarkdownRender";
 
 export const Post = () => {
 	const { id } = useParams();
@@ -65,9 +68,7 @@ export const Post = () => {
 								/>
 							)}
 
-							<div className="prose max-w-none text-gray-800">
-								{post?.content}
-							</div>
+							<MarkdownRenderer content={post.content}></MarkdownRenderer>
 
 							<div className="mt-6 flex flex-wrap gap-2">
 								{post?.tags?.map((tag: string) => (

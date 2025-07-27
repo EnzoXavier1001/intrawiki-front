@@ -5,6 +5,23 @@ import axiosInstance from "../libs/axios";
 import { formatDate } from "../utils/formatDate";
 import { endpoints } from "./endpoints";
 
+export async function createPost(data: IPost): Promise<IPost> {
+	try {
+		const res = await axiosInstance.post(endpoints.posts, data, {
+			headers: {
+				Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzcwOWU3ZDJjMjNhZDEyYWM4MzM5ZCIsImlhdCI6MTc1Mjk2MDQyOX0.pnq0Vl4wc7knOBGMXQMLnBbqSKhrZ95OcIm5PIuTuY0`,
+			},
+		});
+
+		const posts = res.data as IPost;
+
+		return posts;
+	} catch (error) {
+		console.error("Erro ao buscar posts:", error);
+		throw error;
+	}
+}
+
 export async function getPosts(): Promise<IPost[]> {
 	try {
 		const res = await axiosInstance.get(endpoints.posts, {

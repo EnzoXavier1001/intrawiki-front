@@ -1,6 +1,8 @@
 import { Link } from "react-router";
 import type { IPost } from "../../@types/Post";
 import { formatDate } from "../../utils/formatDate";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface ICardProps {
 	post: IPost;
@@ -29,7 +31,11 @@ export const Card = ({ post }: ICardProps) => {
 					<h1 className="text-2xl text-gray-800 font-extrabold hover:underline hover:text-indigo-600 transition-colors">
 						{post.title}
 					</h1>
-					<p className="mt-3 text-gray-600 line-clamp-3">{post.content}</p>
+					<div className="mt-3 text-gray-600 prose max-w-none line-clamp-3">
+						<ReactMarkdown remarkPlugins={[remarkGfm]}>
+							{post.content}
+						</ReactMarkdown>
+					</div>
 				</div>
 
 				{/* Rodapé com autor */}
