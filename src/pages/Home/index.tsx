@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Post } from "../../components/Post";
+import { Card } from "../../components/Card";
 import { api } from "../../services/endpoint";
 import type { IPost } from "../../@types/Post";
 import {
@@ -74,7 +74,7 @@ export const Home = () => {
 						{/* POSTS */}
 						<div className="space-y-4">
 							{posts.map((post) => (
-								<Post key={post._id} post={post} />
+								<Card key={post._id} post={post} />
 							))}
 						</div>
 					</main>

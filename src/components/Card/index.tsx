@@ -2,11 +2,11 @@ import { Link } from "react-router";
 import type { IPost } from "../../@types/Post";
 import { formatDate } from "../../utils/formatDate";
 
-interface IPostCardProps {
+interface ICardProps {
 	post: IPost;
 }
 
-export const Post = ({ post }: IPostCardProps) => {
+export const Card = ({ post }: ICardProps) => {
 	const { author } = post;
 
 	console.log(author);
