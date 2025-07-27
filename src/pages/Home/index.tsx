@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import * as z from "zod";
+
 import { Card } from "../../components/Card";
 import type { IPost } from "../../@types/Post";
 import {
@@ -8,17 +10,37 @@ import {
 	UsersFour,
 	MagnifyingGlass,
 } from "@phosphor-icons/react";
-import { getPosts } from "../../api/post";
+import { getPosts, searchPosts } from "../../api/post";
+import { Controller, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const SearchForm = z.object({
+	search: z.string().optional(),
+});
 
 export const Home = () => {
+	const { handleSubmit, control, watch } = useForm<z.infer<typeof SearchForm>>({
+		resolver: zodResolver(SearchForm),
+	});
 	const [posts, setPosts] = useState<IPost[]>([]);
-	const [search, setSearch] = useState("");
 
 	useEffect(() => {
 		getPosts().then((data) => {
 			setPosts(data);
 		});
 	}, []);
+
+	const search = watch("search");
+
+	const filteredPosts = posts.filter((post) =>
+		post.title.toLowerCase().includes(search?.toLowerCase() || ""),
+	);
+
+	const onSubmit = async (data: z.infer<typeof SearchForm>) => {
+		const searchValue = data.search || "";
+		const result = await searchPosts(searchValue);
+		setPosts(result);
+	};
 
 	return (
 		<div className="bg-gray-100 min-h-screen">
@@ -55,22 +77,27 @@ export const Home = () => {
 						</button>
 					</aside>
 
-					{/* FEED */}
 					<main className="col-span-12 lg:col-span-7">
-						{/* SEARCHBAR */}
 						<div className="flex items-center bg-white rounded-lg shadow px-3 py-2 mb-5">
 							<MagnifyingGlass size={22} className="text-gray-400 mr-2" />
-							<input
-								type="text"
-								placeholder="Buscar posts..."
-								value={search}
-								onChange={(e) => setSearch(e.target.value)}
-								className="w-full outline-none text-gray-700"
-							/>
+							<form onSubmit={handleSubmit(onSubmit)}>
+								<Controller
+									name="search"
+									control={control}
+									render={({ field }) => (
+										<input
+											type="text"
+											placeholder="Buscar posts..."
+											{...field}
+											className="w-full outline-none text-gray-700"
+										/>
+									)}
+								/>
+							</form>
 						</div>
 
 						<div className="space-y-4">
-							{posts.map((post) => (
+							{filteredPosts.map((post) => (
 								<Card key={post._id} post={post} />
 							))}
 						</div>

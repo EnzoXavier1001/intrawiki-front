@@ -61,3 +61,23 @@ export async function getPostByUserId(id: string): Promise<IPost[]> {
 		throw error;
 	}
 }
+
+export async function searchPosts(search: string): Promise<IPost[]> {
+	try {
+		const res = await axiosInstance.get(endpoints.searchPosts, {
+			headers: {
+				Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzcwOWU3ZDJjMjNhZDEyYWM4MzM5ZCIsImlhdCI6MTc1Mjk2MDQyOX0.pnq0Vl4wc7knOBGMXQMLnBbqSKhrZ95OcIm5PIuTuY0`,
+			},
+			params: {
+				search,
+			},
+		});
+
+		const post = res.data as IPost[];
+
+		return post;
+	} catch (error) {
+		console.error("Erro ao buscar posts:", error);
+		throw error;
+	}
+}
