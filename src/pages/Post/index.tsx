@@ -1,25 +1,22 @@
-import { useParams } from "react-router";
-import { ArrowLeft } from "@phosphor-icons/react";
-import { Link } from "react-router";
-import { api } from "../../services/endpoint";
 import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router";
+import { ArrowCircleLeft } from "@phosphor-icons/react";
+
+import { getPostById } from "../../api/post";
+
+import type { IPost } from "../../@types/Post";
 
 export const Post = () => {
 	const { id } = useParams();
-	const [post, setPost] = useState<any>(null);
+	const [post, setPost] = useState<IPost>({} as IPost);
 
 	useEffect(() => {
-		getPostById();
-	}, []);
+		if (!id) return;
 
-	async function getPostById() {
-		const { data } = await api.get(`/posts/${id}`, {
-			headers: {
-				Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzcwOWU3ZDJjMjNhZDEyYWM4MzM5ZCIsImlhdCI6MTc1Mjk2MDQyOX0.pnq0Vl4wc7knOBGMXQMLnBbqSKhrZ95OcIm5PIuTuY0`, // use o seu token real
-			},
+		getPostById(id).then((data) => {
+			setPost(data);
 		});
-		setPost(data);
-	}
+	}, [id]);
 
 	return (
 		<div className="bg-gray-100 min-h-screen">
@@ -28,19 +25,17 @@ export const Post = () => {
 					to="/"
 					className="inline-flex items-center gap-2 text-sm text-purple-700 hover:text-purple-900 transition mb-6"
 				>
-					<ArrowLeft size={18} />
+					<ArrowCircleLeft size={32} />
 					<span>Voltar para a Home</span>
 				</Link>
 
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-					{/* Conteúdo principal */}
 					<main className="lg:col-span-8">
 						<div className="bg-white rounded-lg shadow p-6">
 							<h1 className="text-3xl font-bold text-gray-900 mb-4">
 								{post?.title}
 							</h1>
 
-							{/* Info do autor */}
 							<div className="flex items-center mb-6">
 								<Link to={`/profile/${post?.author?._id}`}>
 									<img
@@ -52,7 +47,7 @@ export const Post = () => {
 								<div className="text-sm">
 									<Link to={`/profile/${post?.author?._id}`}>
 										<p className="text-gray-700 font-medium">
-											{post?.author?.name || "Desconhecido"}
+											{post?.author?.name}
 										</p>
 									</Link>
 									<p className="text-gray-500">
@@ -62,7 +57,6 @@ export const Post = () => {
 								</div>
 							</div>
 
-							{/* Imagem */}
 							{post?.thumbnail && (
 								<img
 									src={post.thumbnail}
@@ -71,12 +65,10 @@ export const Post = () => {
 								/>
 							)}
 
-							{/* Conteúdo */}
 							<div className="prose max-w-none text-gray-800">
 								{post?.content}
 							</div>
 
-							{/* Tags */}
 							<div className="mt-6 flex flex-wrap gap-2">
 								{post?.tags?.map((tag: string) => (
 									<span
@@ -90,7 +82,6 @@ export const Post = () => {
 						</div>
 					</main>
 
-					{/* Sidebar */}
 					<aside className="hidden lg:block lg:col-span-4 space-y-6">
 						<div className="bg-white rounded-lg shadow p-4">
 							<h3 className="text-lg font-semibold mb-2">Sobre o autor</h3>

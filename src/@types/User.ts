@@ -7,6 +7,7 @@ export interface IUser {
 	avatarUrl?: string;
 	linkedin?: string;
 	github?: string;
+	skills?: string[];
 	hobbies?: string[];
 	createdAt: string;
 	badges: string[];

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Card } from "../../components/Card";
-import { api } from "../../services/endpoint";
 import type { IPost } from "../../@types/Post";
 import {
 	Cpu,
@@ -9,49 +8,48 @@ import {
 	UsersFour,
 	MagnifyingGlass,
 } from "@phosphor-icons/react";
+import { getPosts } from "../../api/post";
 
 export const Home = () => {
 	const [posts, setPosts] = useState<IPost[]>([]);
 	const [search, setSearch] = useState("");
 
 	useEffect(() => {
-		loadPosts();
-	}, []);
-
-	async function loadPosts() {
-		try {
-			const { data } = await api.get("/posts", {
-				headers: {
-					Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzcwOWU3ZDJjMjNhZDEyYWM4MzM5ZCIsImlhdCI6MTc1Mjk2MDQyOX0.pnq0Vl4wc7knOBGMXQMLnBbqSKhrZ95OcIm5PIuTuY0`,
-				},
-				params: { search },
-			});
-			console.log(data);
+		getPosts().then((data) => {
 			setPosts(data);
-		} catch (error) {
-			console.error(error);
-		}
-	}
+		});
+	}, []);
 
 	return (
 		<div className="bg-gray-100 min-h-screen">
 			<div className="container mx-auto px-4 py-8">
 				<div className="grid grid-cols-12 gap-6">
-					{/* SIDEBAR */}
 					<aside className="hidden lg:flex lg:col-span-2 flex-col space-y-2">
-						<button className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition">
+						<button
+							className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition"
+							type="button"
+						>
 							<Cpu size={22} />
 							<span>TI</span>
 						</button>
-						<button className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition">
+						<button
+							className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition"
+							type="button"
+						>
 							<ShoppingCart size={22} />
 							<span>VTEX</span>
 						</button>
-						<button className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition">
+						<button
+							className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition"
+							type="button"
+						>
 							<AppWindow size={22} />
 							<span>AEM</span>
 						</button>
-						<button className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition">
+						<button
+							className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition"
+							type="button"
+						>
 							<UsersFour size={22} />
 							<span>RH</span>
 						</button>
@@ -71,7 +69,6 @@ export const Home = () => {
 							/>
 						</div>
 
-						{/* POSTS */}
 						<div className="space-y-4">
 							{posts.map((post) => (
 								<Card key={post._id} post={post} />
@@ -79,7 +76,6 @@ export const Home = () => {
 						</div>
 					</main>
 
-					{/* WIDGETS */}
 					<aside className="hidden lg:block lg:col-span-3 space-y-6">
 						<aside className="hidden lg:block lg:col-span-3 space-y-6">
 							<div className="bg-white p-4 rounded-lg shadow">
@@ -130,7 +126,6 @@ export const Home = () => {
 							</div>
 						</aside>
 
-						{/* Eventos */}
 						<div className="bg-white p-4 rounded-lg shadow">
 							<h2 className="text-lg font-semibold mb-4">Próximos Eventos</h2>
 							<ul className="space-y-3">
