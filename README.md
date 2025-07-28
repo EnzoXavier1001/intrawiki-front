@@ -1,69 +1,101 @@
-# React + TypeScript + Vite
+# 📚 IntraWiki
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**IntraWiki** é uma plataforma interna de blog desenvolvida para facilitar o compartilhamento de conhecimento entre equipes. Ideal para registrar tutoriais, processos, boas práticas e aprendizados técnicos, tudo de forma organizada, responsiva e com uma ótima experiência de uso.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Tecnologias Utilizadas
 
-## Expanding the ESLint configuration
+- **React** – Biblioteca para construção de interfaces modernas.
+- **TypeScript** – Tipagem estática para maior segurança e produtividade.
+- **Tailwind CSS** – Estilização com classes utilitárias.
+- **Vitest** – Testes rápidos e integrados com o Vite.
+- **React Hook Form** – Manipulação eficiente de formulários.
+- **Zod** – Validação de dados com schemas.
+- **React Router** – Gerenciamento de rotas.
+- **Markdown** – Suporte a conteúdo rico e formatado.
+- **Cloudinary** – Upload de imagens (avatars e imagens dos posts).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## ✨ Funcionalidades
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+- 🔐 Login com JWT e controle de acesso
+- 📝 Criação e edição de posts com editor em Markdown
+- 👀 Visualização com aba de Preview em tempo real
+- 🏷️ Tags e categorias para organização de conteúdo
+- 🙋‍♂️ Perfil de usuário com avatar, biografia, habilidades, hobbies e badges
+- 🔎 Busca de posts por título
+- 💡 Página de posts com destaque visual e responsividade
+- ✅ Testes automatizados com Vitest
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## 📦 Instalação
+
+```bash
+git clone https://github.com/seu-usuario/intrawiki.git
+cd intrawiki
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## ▶️ Execução
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm dev
 ```
+
+---
+
+## 🧪 Rodando os testes
+
+```bash
+pnpm test
+```
+
+---
+
+## 🔧 Variáveis de ambiente
+
+Crie um arquivo `.env` na raiz com as seguintes variáveis:
+
+```
+VITE_API_URL=https://sua-api.com
+VITE_CLOUDINARY_URL=https://api.cloudinary.com/v1_1/...
+VITE_CLOUDINARY_PRESET=seu_preset
+```
+
+---
+
+## 🗂️ Estrutura do Projeto
+
+```
+src/
+├── api/              # Arquivos de requisição HTTP (axios)
+├── components/       # Componentes reutilizáveis
+├── hooks/            # Hooks customizados
+├── pages/            # Páginas (Home, Post, Perfil etc.)
+├── routes/           # Configuração de rotas
+├── styles/           # Estilos globais
+├── types/            # Tipagens globais
+├── utils/            # Utilitários
+└── tests/            # Testes automatizados
+```
+
+---
+
+## 🧑‍💻 Contribuindo
+
+Pull requests são bem-vindos! Para grandes mudanças, por favor abra uma issue antes para discutirmos o que você gostaria de alterar.
+
+---
+
+## 📄 Licença
+
+Este projeto está licenciado sob a [MIT License](LICENSE).
+
+---
+
+**IntraWiki** — Compartilhe conhecimento. Construa cultura. 🚀
