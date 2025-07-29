@@ -4,6 +4,7 @@ import gymratBadge from "../assets/badge4.png";
 import partyGoerBadge from "../assets/badge3.png";
 import topOneBadge from "../assets/badge1.png";
 import crushBadge from "../assets/badge5.png";
+import admBadge from "../assets/badge6.png";
 
 export const badgeData = {
 	rockstar: {
@@ -35,5 +36,10 @@ export const badgeData = {
 		title: "Festeiro Sem Rastro",
 		text: "Última lembrança foi no karaokê. Você tava. O copo não era seu. Mas a fama é.",
 		image: partyGoerBadge,
+	},
+	adm: {
+		title: "Guardião da Wiki",
+		text: "Conhece cada rota, cada regra e cada atalho. Se tá funcionando, agradeça ao ADM.",
+		image: admBadge,
 	},
 };

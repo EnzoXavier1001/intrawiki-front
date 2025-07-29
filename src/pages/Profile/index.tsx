@@ -8,6 +8,7 @@ import { badgeData } from "../../constants/badgeData";
 import { getUserById } from "../../api/user";
 import { getPostByUserId } from "../../api/post";
 import type { IPost } from "../../@types/Post";
+import admBadge from "../../assets/badge6.png";
 
 export const Profile = () => {
 	const { id } = useParams();
@@ -38,7 +39,7 @@ export const Profile = () => {
 			<div className="bg-white -mt-40 pb-6 rounded-lg shadow-md max-w-4xl w-full mx-auto flex flex-col items-center px-4 sm:px-6">
 				<img
 					className="w-32 h-32 rounded-full object-cover -mt-16"
-					src="https://media.licdn.com/dms/image/v2/D4D03AQEfHmk-4dEpSA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1686099424971?e=1756339200&v=beta&t=U1KRS34w_tO5DXFyL5M8_3NoHtKYlB-mFDK94myiRfw"
+					src={user?.avatarUrl}
 					alt={user?.name}
 				/>
 				<h1 className="mt-4 text-xl font-semibold text-center">{user?.name}</h1>
@@ -89,6 +90,8 @@ export const Profile = () => {
 								/>
 							);
 						})}
+
+						<img src={admBadge} className="w-[60px] cursor-pointer" />
 					</div>
 				)}
 			</div>

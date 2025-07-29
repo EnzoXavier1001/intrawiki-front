@@ -23,6 +23,7 @@ export const Home = () => {
 		resolver: zodResolver(SearchForm),
 	});
 	const [posts, setPosts] = useState<IPost[]>([]);
+	const [open, setOpen] = useState(false);
 
 	useEffect(() => {
 		getPosts().then((data) => {
@@ -187,6 +188,36 @@ export const Home = () => {
 						</div>
 					</aside>
 				</div>
+			</div>
+			<div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2">
+				{open && (
+					<div className="flex flex-col items-end gap-2 animate-fade-in">
+						<a
+							href="https://github.com/EnzoXavier1001/intrawiki-front/pulls"
+							target="_blank"
+							rel="noopener"
+							className="bg-white border shadow px-4 py-2 rounded-lg text-sm text-gray-800 hover:bg-gray-100 transition"
+						>
+							🐙 Sugerir melhoria (GitHub)
+						</a>
+						<a
+							href="https://forms.gle/seu-form"
+							target="_blank"
+							rel="noopener"
+							className="bg-white border shadow px-4 py-2 rounded-lg text-sm text-gray-800 hover:bg-gray-100 transition"
+						>
+							💬 Enviar sugestão
+						</a>
+					</div>
+				)}
+
+				<button
+					onClick={() => setOpen(!open)}
+					className="bg-purple-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-purple-700 transition text-sm"
+					type="button"
+				>
+					{open ? "Fechar ×" : "💡 Contribua"}
+				</button>
 			</div>
 		</div>
 	);
