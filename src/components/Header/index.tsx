@@ -1,14 +1,19 @@
 import { useState } from "react";
-import { Link } from "react-router";
-import { Bell } from "@phosphor-icons/react";
+import { Link, useNavigate } from "react-router";
+import { useUser } from "../../hooks/useUser";
 
 export const Header = () => {
+	const { user, handleLogout } = useUser();
 	const [showProfileMenu, setShowProfileMenu] = useState(false);
+	const navigate = useNavigate();
 
-	const user = {
-		name: "Joana",
-		avatar: "https://i.pravatar.cc/40?img=5",
-	};
+	async function handleUserLogout() {
+		const success = await handleLogout();
+
+		if (success) {
+			navigate("/login");
+		}
+	}
 
 	return (
 		<header className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
@@ -44,8 +49,8 @@ export const Header = () => {
 							className="w-9 h-9 rounded-full overflow-hidden border-2 border-transparent hover:border-gray-300 transition"
 						>
 							<img
-								src={user.avatar}
-								alt={user.name}
+								src={user?.avatar}
+								alt={user?.name}
 								className="w-full h-full object-cover"
 							/>
 						</button>
@@ -55,7 +60,7 @@ export const Header = () => {
 								<ul className="py-2 text-[15px] text-gray-700">
 									<li>
 										<Link
-											to="/profile"
+											to={`/profile/${user._id}`}
 											className="block px-4 py-2 hover:bg-gray-100"
 										>
 											Perfil
@@ -68,6 +73,15 @@ export const Header = () => {
 										>
 											Configurações
 										</Link>
+									</li>
+									<li>
+										<button
+											type="button"
+											onClick={handleUserLogout}
+											className="w-full text-left px-4 py-2 hover:bg-gray-100"
+										>
+											Sair
+										</button>
 									</li>
 								</ul>
 							</div>

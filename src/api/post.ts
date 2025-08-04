@@ -1,35 +1,34 @@
-// src/api/post.ts
-
 import type { IPost } from "../@types/Post";
 import axiosInstance from "../libs/axios";
 import { formatDate } from "../utils/formatDate";
 import { endpoints } from "./endpoints";
 
+function getAuthHeader() {
+	const token = localStorage.getItem("token");
+	return {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+}
+
 export async function createPost(data: IPost): Promise<IPost> {
 	try {
-		const res = await axiosInstance.post(endpoints.posts, data, {
-			headers: {
-				Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzcwOWU3ZDJjMjNhZDEyYWM4MzM5ZCIsImlhdCI6MTc1Mjk2MDQyOX0.pnq0Vl4wc7knOBGMXQMLnBbqSKhrZ95OcIm5PIuTuY0`,
-			},
-		});
-
-		const posts = res.data as IPost;
-
-		return posts;
+		const res = await axiosInstance.post(
+			endpoints.posts,
+			data,
+			getAuthHeader(),
+		);
+		return res.data as IPost;
 	} catch (error) {
-		console.error("Erro ao buscar posts:", error);
+		console.error("Erro ao criar post:", error);
 		throw error;
 	}
 }
 
 export async function getPosts(): Promise<IPost[]> {
 	try {
-		const res = await axiosInstance.get(endpoints.posts, {
-			headers: {
-				Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzcwOWU3ZDJjMjNhZDEyYWM4MzM5ZCIsImlhdCI6MTc1Mjk2MDQyOX0.pnq0Vl4wc7knOBGMXQMLnBbqSKhrZ95OcIm5PIuTuY0`,
-			},
-		});
-
+		const res = await axiosInstance.get(endpoints.posts, getAuthHeader());
 		const posts = res.data as IPost[];
 
 		return posts.map((post) => ({
@@ -44,17 +43,13 @@ export async function getPosts(): Promise<IPost[]> {
 
 export async function getPostById(id: string): Promise<IPost> {
 	try {
-		const res = await axiosInstance.get(endpoints.postById(id), {
-			headers: {
-				Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzcwOWU3ZDJjMjNhZDEyYWM4MzM5ZCIsImlhdCI6MTc1Mjk2MDQyOX0.pnq0Vl4wc7knOBGMXQMLnBbqSKhrZ95OcIm5PIuTuY0`,
-			},
-		});
-
-		const post = res.data as IPost;
-
-		return post;
+		const res = await axiosInstance.get(
+			endpoints.postById(id),
+			getAuthHeader(),
+		);
+		return res.data as IPost;
 	} catch (error) {
-		console.error("Erro ao buscar posts:", error);
+		console.error("Erro ao buscar post:", error);
 		throw error;
 	}
 }
@@ -62,19 +57,12 @@ export async function getPostById(id: string): Promise<IPost> {
 export async function getPostByUserId(id: string): Promise<IPost[]> {
 	try {
 		const res = await axiosInstance.get(endpoints.postsByUserId, {
-			headers: {
-				Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzcwOWU3ZDJjMjNhZDEyYWM4MzM5ZCIsImlhdCI6MTc1Mjk2MDQyOX0.pnq0Vl4wc7knOBGMXQMLnBbqSKhrZ95OcIm5PIuTuY0`,
-			},
-			params: {
-				id,
-			},
+			...getAuthHeader(),
+			params: { id },
 		});
-
-		const post = res.data as IPost[];
-
-		return post;
+		return res.data as IPost[];
 	} catch (error) {
-		console.error("Erro ao buscar posts:", error);
+		console.error("Erro ao buscar posts por usuário:", error);
 		throw error;
 	}
 }
@@ -82,17 +70,10 @@ export async function getPostByUserId(id: string): Promise<IPost[]> {
 export async function searchPosts(search: string): Promise<IPost[]> {
 	try {
 		const res = await axiosInstance.get(endpoints.searchPosts, {
-			headers: {
-				Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NzcwOWU3ZDJjMjNhZDEyYWM4MzM5ZCIsImlhdCI6MTc1Mjk2MDQyOX0.pnq0Vl4wc7knOBGMXQMLnBbqSKhrZ95OcIm5PIuTuY0`,
-			},
-			params: {
-				search,
-			},
+			...getAuthHeader(),
+			params: { search },
 		});
-
-		const post = res.data as IPost[];
-
-		return post;
+		return res.data as IPost[];
 	} catch (error) {
 		console.error("Erro ao buscar posts:", error);
 		throw error;

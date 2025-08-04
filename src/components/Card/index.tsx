@@ -16,7 +16,6 @@ export const Card = ({ post }: ICardProps) => {
 	return (
 		<div className="mt-6">
 			<div className="max-w-4xl px-8 py-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-				{/* Cabeçalho com data e categoria */}
 				<div className="flex justify-between items-center">
 					<span className="font-light text-gray-500 text-sm capitalize">
 						{formatDate(post.createdAt)}
@@ -47,7 +46,7 @@ export const Card = ({ post }: ICardProps) => {
 						Saiba mais →
 					</Link>
 					<div>
-						<a href={`/profile/${author?._id}`} className="flex items-center">
+						<Link to={`/profile/${author?._id}`} className="flex items-center">
 							<img
 								src={author?.avatarUrl}
 								alt="avatar"
@@ -56,7 +55,7 @@ export const Card = ({ post }: ICardProps) => {
 							<h1 className="text-gray-700 font-semibold hover:underline">
 								{author?.name}
 							</h1>
-						</a>
+						</Link>
 					</div>
 				</div>
 			</div>

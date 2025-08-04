@@ -4,5 +4,6 @@ export const endpoints = {
 	postsByUserId: "/posts/search/user",
 	searchPosts: "/posts/search",
 	users: "/users",
+	auth: "/users/auth",
 	userById: (id: string) => `/users/${id}`,
 };

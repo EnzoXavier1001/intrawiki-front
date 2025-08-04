@@ -55,15 +55,29 @@ export const CreatePost = () => {
 		"VTEX",
 	];
 
-	const onSubmit = (data: PostData) => {
-		const response = createPost({
-			...data,
-			author: "687c3e2d5dd9018d6770ea43",
-		});
+	const onSubmit = async (data: PostData) => {
+		const storedUser = localStorage.getItem("user");
 
-		if (response) {
-			toast.success("Post criado com sucesso!");
-			reset();
+		if (!storedUser) {
+			toast.error("Usuário não autenticado");
+			return;
+		}
+
+		const user = JSON.parse(storedUser);
+		const authorId = user._id;
+
+		try {
+			const response = await createPost({
+				...data,
+				author: authorId,
+			});
+
+			if (response) {
+				toast.success("Post criado com sucesso!");
+				reset();
+			}
+		} catch (err) {
+			toast.error("Erro ao criar o post.");
 		}
 	};
 
