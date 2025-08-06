@@ -41,7 +41,6 @@ export const Header = () => {
 					>
 						Criar Post
 					</Link>
-
 					<div className="relative">
 						<button
 							onClick={() => setShowProfileMenu((prev) => !prev)}
@@ -49,8 +48,8 @@ export const Header = () => {
 							className="w-9 h-9 rounded-full overflow-hidden border-2 border-transparent hover:border-gray-300 transition"
 						>
 							<img
-								src={user?.avatar}
-								alt={user?.name}
+								src={user?.avatarUrl}
+								alt={user.name}
 								className="w-full h-full object-cover"
 							/>
 						</button>

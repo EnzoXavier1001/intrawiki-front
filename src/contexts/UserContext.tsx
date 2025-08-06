@@ -5,12 +5,12 @@ import type { IUser } from "../@types/User";
 
 interface UserContextType {
 	user: IUser | null;
-	handleLogin: (data: UserAuth) => boolean;
+	handleLogin: (data: UserAuth) => void;
 	handleLogout: () => void;
 }
 
-export const UserContext = createContext<UserContextType | undefined>(
-	undefined,
+export const UserContext = createContext<UserContextType>(
+	{} as UserContextType,
 );
 
 interface AuthProviderProps {
