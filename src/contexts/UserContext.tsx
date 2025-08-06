@@ -5,7 +5,7 @@ import type { IUser } from "../@types/User";
 
 interface UserContextType {
 	user: IUser | null;
-	handleLogin: (data: UserAuth) => void;
+	handleLogin: (data: UserAuth) => boolean;
 	handleLogout: () => void;
 }
 

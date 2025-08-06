@@ -100,7 +100,6 @@ export const Login = () => {
 								)}
 							</div>
 
-							{/* Botão */}
 							<button
 								type="submit"
 								className="w-full mt-2 bg-purple-700 text-white py-3 rounded-md hover:bg-purple-800 transition"
