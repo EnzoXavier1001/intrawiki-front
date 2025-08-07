@@ -13,6 +13,7 @@ import {
 import { getPosts, searchPosts } from "../../api/post";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast, ToastContainer } from "react-toastify";
 
 const SearchForm = z.object({
 	search: z.string().optional(),
@@ -42,6 +43,17 @@ export const Home = () => {
 		const result = await searchPosts(searchValue);
 		setPosts(result);
 	};
+
+	useEffect(() => {
+		const showModal = JSON.parse(localStorage.getItem("showModal")!);
+
+		if (showModal) {
+			localStorage.removeItem("showModal");
+			setTimeout(() => {
+				toast.success("Usuário logado com sucesso!");
+			}, 300);
+		}
+	}, []);
 
 	return (
 		<div className="bg-gray-100 min-h-screen">
@@ -219,6 +231,7 @@ export const Home = () => {
 					{open ? "Fechar ×" : "💡 Contribua"}
 				</button>
 			</div>
+			<ToastContainer autoClose={5000} />
 		</div>
 	);
 };

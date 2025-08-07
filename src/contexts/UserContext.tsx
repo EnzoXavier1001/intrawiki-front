@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			console.log(data);
 			localStorage.setItem("token", data.token);
 			localStorage.setItem("user", JSON.stringify(data.user));
+			localStorage.setItem("showModal", JSON.stringify(true));
 
 			setUser(data.user);
 			return true;
@@ -46,6 +47,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		try {
 			localStorage.removeItem("token");
 			localStorage.removeItem("user");
+			localStorage.removeItem("showModal");
 
 			setUser(null);
 

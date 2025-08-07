@@ -29,8 +29,6 @@ export const Login = () => {
 	async function handleUserLogin(userData: UserInput) {
 		const success = await handleLogin(userData);
 
-		console.log(success);
-
 		if (success) {
 			toast.success("Usuário autenticado com sucesso!");
 			setTimeout(() => navigate("/"), 1000);
