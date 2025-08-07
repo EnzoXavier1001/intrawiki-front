@@ -3,17 +3,8 @@
 import type { IUser } from "../@types/User";
 import axiosInstance from "../libs/axios";
 import type { UserInput } from "../pages/Login";
+import { getAuthHeaders } from "../utils/authHeaders";
 import { endpoints } from "./endpoints";
-
-function getAuthHeaders() {
-	const token = localStorage.getItem("token");
-
-	return {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	};
-}
 
 export async function authenticationUser(data: UserInput) {
 	try {

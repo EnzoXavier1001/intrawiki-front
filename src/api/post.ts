@@ -1,23 +1,15 @@
 import type { IPost } from "../@types/Post";
 import axiosInstance from "../libs/axios";
 import { formatDate } from "../utils/formatDate";
+import { getAuthHeaders } from "../utils/authHeaders";
 import { endpoints } from "./endpoints";
-
-function getAuthHeader() {
-	const token = localStorage.getItem("token");
-	return {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	};
-}
 
 export async function createPost(data: IPost): Promise<IPost> {
 	try {
 		const res = await axiosInstance.post(
 			endpoints.posts,
 			data,
-			getAuthHeader(),
+			getAuthHeaders(),
 		);
 		return res.data as IPost;
 	} catch (error) {
@@ -28,7 +20,7 @@ export async function createPost(data: IPost): Promise<IPost> {
 
 export async function getPosts(): Promise<IPost[]> {
 	try {
-		const res = await axiosInstance.get(endpoints.posts, getAuthHeader());
+		const res = await axiosInstance.get(endpoints.posts, getAuthHeaders());
 		const posts = res.data as IPost[];
 
 		return posts.map((post) => ({
@@ -45,7 +37,7 @@ export async function getPostById(id: string): Promise<IPost> {
 	try {
 		const res = await axiosInstance.get(
 			endpoints.postById(id),
-			getAuthHeader(),
+			getAuthHeaders(),
 		);
 		return res.data as IPost;
 	} catch (error) {
@@ -57,7 +49,7 @@ export async function getPostById(id: string): Promise<IPost> {
 export async function getPostByUserId(id: string): Promise<IPost[]> {
 	try {
 		const res = await axiosInstance.get(endpoints.postsByUserId, {
-			...getAuthHeader(),
+			...getAuthHeaders(),
 			params: { id },
 		});
 		return res.data as IPost[];
@@ -70,7 +62,7 @@ export async function getPostByUserId(id: string): Promise<IPost[]> {
 export async function searchPosts(search: string): Promise<IPost[]> {
 	try {
 		const res = await axiosInstance.get(endpoints.searchPosts, {
-			...getAuthHeader(),
+			...getAuthHeaders(),
 			params: { search },
 		});
 		return res.data as IPost[];
