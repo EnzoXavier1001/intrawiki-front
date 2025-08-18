@@ -1,7 +1,7 @@
 import type { IPost } from "../@types/Post";
 import axiosInstance from "../libs/axios";
-import { formatDate } from "../utils/formatDate";
 import { getAuthHeaders } from "../utils/authHeaders";
+import { formatDate } from "../utils/formatDate";
 import { endpoints } from "./endpoints";
 
 export async function createPost(data: IPost): Promise<IPost> {
@@ -59,11 +59,11 @@ export async function getPostByUserId(id: string): Promise<IPost[]> {
 	}
 }
 
-export async function searchPosts(search: string): Promise<IPost[]> {
+export async function searchPosts(category: string): Promise<IPost[]> {
 	try {
 		const res = await axiosInstance.get(endpoints.searchPosts, {
 			...getAuthHeaders(),
-			params: { search },
+			params: { category },
 		});
 		return res.data as IPost[];
 	} catch (error) {

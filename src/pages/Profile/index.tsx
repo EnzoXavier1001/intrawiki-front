@@ -100,9 +100,7 @@ export const Profile = () => {
 				</div>
 			</div>
 
-			{/* Hobbies, Skills, Posts */}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 sm:px-6 max-w-4xl w-full mx-auto mt-6 pb-8">
-				{/* Hobbies */}
 				<div className="flex flex-col space-y-6">
 					<div className="bg-white p-6 rounded-lg shadow">
 						<h2 className="text-xl font-semibold mb-4">Hobbies</h2>
@@ -113,7 +111,6 @@ export const Profile = () => {
 						</ul>
 					</div>
 
-					{/* Skills */}
 					<div className="bg-white p-6 rounded-lg shadow">
 						<h2 className="text-xl font-semibold mb-4">Skills/Languages</h2>
 						<ul className="list-disc list-inside space-y-2 text-gray-700">

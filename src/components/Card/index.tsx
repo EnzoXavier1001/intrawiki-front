@@ -1,8 +1,8 @@
+import ReactMarkdown from "react-markdown";
 import { Link } from "react-router";
+import remarkGfm from "remark-gfm";
 import type { IPost } from "../../@types/Post";
 import { formatDate } from "../../utils/formatDate";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 
 interface ICardProps {
 	post: IPost;
@@ -10,8 +10,6 @@ interface ICardProps {
 
 export const Card = ({ post }: ICardProps) => {
 	const { author } = post;
-
-	console.log(author);
 
 	return (
 		<div className="mt-6">

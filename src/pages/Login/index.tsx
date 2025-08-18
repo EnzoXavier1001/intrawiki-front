@@ -1,8 +1,8 @@
-import * as z from "zod";
-import { useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
-import { toast, ToastContainer } from "react-toastify";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { ToastContainer, toast } from "react-toastify";
+import * as z from "zod";
 import { useUser } from "../../hooks/useUser";
 
 const UserSchema = z.object({

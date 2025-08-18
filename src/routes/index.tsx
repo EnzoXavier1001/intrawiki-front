@@ -1,10 +1,12 @@
 import { createBrowserRouter } from "react-router";
-import { Home } from "../pages/Home";
-import { Profile } from "../pages/Profile";
 import { DefaultLayout } from "../layouts/default";
+import { ErrorPage } from "../pages/ErrorPage";
+import { Home } from "../pages/Home";
+import { Login } from "../pages/Login";
 import { Post } from "../pages/Post";
 import { CreatePost } from "../pages/Post/create";
-import { Login } from "../pages/Login";
+import { Profile } from "../pages/Profile";
+import { UserEdit } from "../pages/Profile/edit";
 import { PrivateRoute } from "./guards/privateRoutes";
 import { PublicRoute } from "./guards/publicRoutes";
 
@@ -21,6 +23,7 @@ export const routes = createBrowserRouter([
 			{ path: "/profile/:id", element: <Profile /> },
 			{ path: "/create", element: <CreatePost /> },
 			{ path: "/post/:id", element: <Post /> },
+			{ path: "/settings/", element: <UserEdit /> },
 		],
 	},
 	{
@@ -30,5 +33,9 @@ export const routes = createBrowserRouter([
 				<Login />
 			</PublicRoute>
 		),
+	},
+	{
+		path: "*",
+		element: <ErrorPage />,
 	},
 ]);

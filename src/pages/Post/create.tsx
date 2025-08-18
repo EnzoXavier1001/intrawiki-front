@@ -1,16 +1,26 @@
-import { useState, KeyboardEvent } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import MdEditor from "react-markdown-editor-lite";
 import MarkdownIt from "markdown-it";
+import { type KeyboardEvent, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import MdEditor from "react-markdown-editor-lite";
+import { z } from "zod";
 import "react-markdown-editor-lite/lib/index.css";
-import { createPost } from "../../api/post";
 import { ToastContainer, toast } from "react-toastify";
+import { createPost } from "../../api/post";
 
 const mdParser = new MarkdownIt();
 
-// --- Schema de validação
+const categories = [
+	"PVI",
+	"AEM Author",
+	"AEM Target",
+	"AEM Launch",
+	"Design",
+	"TI",
+	"RH",
+	"VTEX",
+];
+
 const postSchema = z.object({
 	title: z.string().min(3, "Título muito curto"),
 	category: z.string().min(1, "Selecione uma categoria"),
@@ -43,17 +53,6 @@ export const CreatePost = () => {
 			tags: [],
 		},
 	});
-
-	const categories = [
-		"PVI",
-		"AEM Author",
-		"AEM Target",
-		"AEM Launch",
-		"Design",
-		"TI",
-		"RH",
-		"VTEX",
-	];
 
 	const onSubmit = async (data: PostData) => {
 		const storedUser = localStorage.getItem("user");
@@ -104,8 +103,11 @@ export const CreatePost = () => {
 
 			<form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 				<div>
-					<label className="block font-medium mb-1">Título</label>
+					<label htmlFor="title" className="block font-medium mb-1">
+						Título
+					</label>
 					<input
+						id="title"
 						{...register("title")}
 						className="w-full border border-gray-300 rounded px-3 py-2"
 					/>
@@ -115,8 +117,11 @@ export const CreatePost = () => {
 				</div>
 
 				<div>
-					<label className="block font-medium mb-1">Categoria</label>
+					<label htmlFor="category" className="block font-medium mb-1">
+						Categoria
+					</label>
 					<select
+						id="category"
 						{...register("category")}
 						className="w-full border border-gray-300 rounded px-3 py-2"
 					>
@@ -133,7 +138,7 @@ export const CreatePost = () => {
 				</div>
 
 				<div>
-					<label className="block font-medium mb-1">Tags</label>
+					<p className="block font-medium mb-1">Tags</p>
 					<div className="flex flex-wrap gap-2 mb-2">
 						{getValues("tags").map((tag) => (
 							<span

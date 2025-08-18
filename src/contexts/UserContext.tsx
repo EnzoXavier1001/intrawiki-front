@@ -1,7 +1,7 @@
-import { createContext, ReactNode, useState, useEffect } from "react";
-import { authenticationUser } from "../api/user";
+import { createContext, type ReactNode, useEffect, useState } from "react";
 import type { UserAuth } from "../@types/Auth";
 import type { IUser } from "../@types/User";
+import { authenticationUser } from "../api/user";
 
 interface UserContextType {
 	user: IUser | null;
@@ -30,7 +30,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	async function handleLogin(userData: UserAuth): Promise<boolean> {
 		try {
 			const { data } = await authenticationUser(userData);
-			console.log(data);
 			localStorage.setItem("token", data.token);
 			localStorage.setItem("user", JSON.stringify(data.user));
 			localStorage.setItem("showModal", JSON.stringify(true));
