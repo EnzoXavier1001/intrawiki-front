@@ -10,5 +10,10 @@ export interface IUser {
 	skills?: string[];
 	hobbies?: string[];
 	createdAt: string;
-	badges: string[];
+	badges: {
+		badgeId: string;
+		title: string;
+		text: string;
+		image: string;
+	}[];
 }

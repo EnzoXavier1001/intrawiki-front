@@ -7,6 +7,7 @@ import { Post } from "../pages/Post";
 import { CreatePost } from "../pages/Post/create";
 import { Profile } from "../pages/Profile";
 import { UserEdit } from "../pages/Profile/edit";
+import { Register } from "../pages/Register";
 import { PrivateRoute } from "./guards/privateRoutes";
 import { PublicRoute } from "./guards/publicRoutes";
 
@@ -25,6 +26,14 @@ export const routes = createBrowserRouter([
 			{ path: "/post/:id", element: <Post /> },
 			{ path: "/settings/", element: <UserEdit /> },
 		],
+	},
+	{
+		path: "/register",
+		element: (
+			<PublicRoute>
+				<Register />
+			</PublicRoute>
+		),
 	},
 	{
 		path: "/login",

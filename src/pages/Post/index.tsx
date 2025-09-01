@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react";
-import { useParams, Link } from "react-router";
-import { ArrowCircleLeft } from "@phosphor-icons/react";
-import { getPostById } from "../../api/post";
 import { Crepe } from "@milkdown/crepe";
+import { ArrowCircleLeft } from "@phosphor-icons/react";
+import { useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router";
+import { getPostById } from "../../api/post";
 
 import "./styles.css";
 
@@ -21,6 +21,7 @@ export const Post = () => {
 
 		getPostById(id).then((data) => {
 			setPost(data);
+			console.log(data);
 		});
 	}, [id]);
 
@@ -137,7 +138,7 @@ export const Post = () => {
 							<h3 className="text-lg font-semibold mb-2">Sobre o autor</h3>
 							<p className="text-sm text-gray-600">
 								{post.author?.name
-									? `${post.author.name} é um desenvolvedor entusiasta que escreve sobre tecnologia.`
+									? `${post.author.name} ${post.author.biography}`
 									: "Autor não identificado."}
 							</p>
 						</div>

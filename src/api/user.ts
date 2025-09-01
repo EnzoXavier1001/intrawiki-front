@@ -1,5 +1,3 @@
-// src/api/post.ts
-
 import type { IUser } from "../@types/User";
 import axiosInstance from "../libs/axios";
 import type { UserInput } from "../pages/Login";

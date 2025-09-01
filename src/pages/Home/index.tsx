@@ -1,47 +1,48 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-	AppWindow,
-	Cpu,
-	Globe,
-	MagnifyingGlass,
-	ShoppingCart,
-	UsersFour,
-} from "@phosphor-icons/react";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import * as z from "zod";
+import type { IAnnouncements } from "../../@types/Announcements";
 import type { IPost } from "../../@types/Post";
+import { getAnnouncements } from "../../api/announcements";
 import { getPosts, searchPosts } from "../../api/post";
 import { Card } from "../../components/Card";
 import { Sidebar } from "../../components/Sidebar";
+import { formatDate } from "../../utils/formatDate";
 
 const SearchForm = z.object({
 	search: z.string().optional(),
 });
 
 export const Home = () => {
-	const { handleSubmit, control, watch } = useForm<z.infer<typeof SearchForm>>({
+	const { handleSubmit, register } = useForm<z.infer<typeof SearchForm>>({
 		resolver: zodResolver(SearchForm),
 	});
 	const [posts, setPosts] = useState<IPost[]>([]);
 	const [open, setOpen] = useState(false);
 	const [filteredPosts, setFilteredPosts] = useState<IPost[]>([]);
 	const [categorySelected, setCategorySelected] = useState("Global");
+	const [announcements, setAnnouncements] = useState<IAnnouncements[]>([]);
 
 	useEffect(() => {
-		getPosts().then((data) => {
-			setPosts(data);
-			setFilteredPosts(data);
-		});
+		Promise.all([getPosts(), getAnnouncements()])
+			.then(([postsData, announcementsData]) => {
+				setPosts(postsData);
+				setFilteredPosts(postsData);
+				setAnnouncements(announcementsData);
+			})
+			.catch((error) => {
+				console.error("Erro ao buscar dados:", error);
+			});
 	}, []);
 
-	const search = watch("search");
-
 	const onSubmit = async (data: z.infer<typeof SearchForm>) => {
-		const searchValue = data.search || "";
-		const result = await searchPosts(searchValue);
-		setPosts(result);
+		const title = data.search || "";
+
+		const result = await searchPosts("", title);
+		setFilteredPosts(result);
 	};
 
 	useEffect(() => {
@@ -82,19 +83,13 @@ export const Home = () => {
 
 					<main className="col-span-12 lg:col-span-7">
 						<div className="flex items-center bg-white rounded-lg shadow px-3 py-2 mb-5">
-							<MagnifyingGlass size={22} className="text-gray-400 mr-2" />
-							<form onSubmit={handleSubmit(onSubmit)}>
-								<Controller
-									name="search"
-									control={control}
-									render={({ field }) => (
-										<input
-											type="text"
-											placeholder="Buscar posts..."
-											{...field}
-											className="w-full outline-none text-gray-700"
-										/>
-									)}
+							<MagnifyingGlassIcon size={22} className="text-gray-400 mr-2" />
+							<form onSubmit={handleSubmit(onSubmit)} className="w-full">
+								<input
+									type="text"
+									placeholder="Digite algo e pressione Enter para pesquisar..."
+									{...register("search")}
+									className="w-full outline-none text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-purple-400 rounded-lg px-3 py-2 transition"
 								/>
 							</form>
 						</div>
@@ -189,33 +184,21 @@ export const Home = () => {
 						<div className="bg-white p-4 rounded-lg shadow">
 							<h2 className="text-lg font-semibold mb-4">Próximos Eventos</h2>
 							<ul className="space-y-3">
-								<li className="flex justify-between items-center hover:bg-gray-100 rounded px-2 py-1">
-									<div>
-										<p className="text-gray-800 font-medium">Treinamento AEM</p>
-										<p className="text-sm text-gray-500">15 Ago 2025</p>
-									</div>
-									<span className="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full">
-										Online
-									</span>
-								</li>
-								<li className="flex justify-between items-center hover:bg-gray-100 rounded px-2 py-1">
-									<div>
-										<p className="text-gray-800 font-medium">Workshop VTEX</p>
-										<p className="text-sm text-gray-500">20 Ago 2025</p>
-									</div>
-									<span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full">
-										Presencial
-									</span>
-								</li>
-								<li className="flex justify-between items-center hover:bg-gray-100 rounded px-2 py-1">
-									<div>
-										<p className="text-gray-800 font-medium">Reunião RH</p>
-										<p className="text-sm text-gray-500">25 Ago 2025</p>
-									</div>
-									<span className="bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded-full">
-										Híbrido
-									</span>
-								</li>
+								{announcements.map((announcement) => (
+									<li
+										key={announcement.title}
+										className="flex justify-between items-center hover:bg-gray-100 rounded px-2 py-1"
+									>
+										<div>
+											<p className="text-gray-800 font-medium">
+												{announcement.title}
+											</p>
+											<p className="text-sm text-gray-500">
+												{formatDate(announcement.eventDate)}
+											</p>
+										</div>
+									</li>
+								))}
 							</ul>
 						</div>
 					</aside>

@@ -1,12 +1,18 @@
 // src/constants/badgeData.ts
-import rockstarBadge from "../assets/badge2.png";
-import gymratBadge from "../assets/badge4.png";
-import partyGoerBadge from "../assets/badge3.png";
 import topOneBadge from "../assets/badge1.png";
+import rockstarBadge from "../assets/badge2.png";
+import partyGoerBadge from "../assets/badge3.png";
+import gymratBadge from "../assets/badge4.png";
 import crushBadge from "../assets/badge5.png";
 import admBadge from "../assets/badge6.png";
 
-export const badgeData = {
+interface IBadge {
+	title: string;
+	text: string;
+	image: string;
+}
+
+export const badgeData: Record<string, IBadge> = {
 	rockstar: {
 		title: "Rockstar Oficial",
 		text: "Nota O? Você não só entregou, você deu aula! Um verdadeiro mestre na arte de brilhar onde passa.",

@@ -1,13 +1,13 @@
+import { GithubLogoIcon, LinkedinLogoIcon } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
+import type { IPost } from "../../@types/Post";
 import type { IUser } from "../../@types/User";
-import { GithubLogo, LinkedinLogo } from "@phosphor-icons/react";
-import { formatDate } from "../../utils/formatDate";
+import { getPostByUserId } from "../../api/post";
+import { getUserById } from "../../api/user";
 import { Modal } from "../../components/Modal";
 import { badgeData } from "../../constants/badgeData";
-import { getUserById } from "../../api/user";
-import { getPostByUserId } from "../../api/post";
-import type { IPost } from "../../@types/Post";
+import { formatDate } from "../../utils/formatDate";
 
 export const Profile = () => {
 	const { id } = useParams();
@@ -22,13 +22,14 @@ export const Profile = () => {
 	useEffect(() => {
 		if (!id) return;
 
-		getUserById(id).then((data) => {
-			setUser(data);
-		});
-
-		getPostByUserId(id).then((data) => {
-			setUserPosts(data);
-		});
+		Promise.all([getUserById(id), getPostByUserId(id)])
+			.then(([userData, postData]) => {
+				setUser(userData);
+				setUserPosts(postData);
+			})
+			.catch((error) => {
+				console.error("Erro ao buscar dados:", error);
+			});
 	}, [id]);
 
 	return (
@@ -49,12 +50,12 @@ export const Profile = () => {
 				<div className="flex items-center gap-4">
 					{user?.linkedin && (
 						<Link to={user?.linkedin} target="_blank" rel="noopener noreferrer">
-							<LinkedinLogo size={24} />
+							<LinkedinLogoIcon size={24} />
 						</Link>
 					)}
 					{user?.github && (
 						<Link to={user?.github} target="_blank" rel="noopener noreferrer">
-							<GithubLogo size={24} />
+							<GithubLogoIcon size={24} />
 						</Link>
 					)}
 				</div>
@@ -75,16 +76,14 @@ export const Profile = () => {
 					<div>
 						<h3 className="text-sm text-gray-500 font-semibold">Badges</h3>
 						<div className="flex justify-center gap-3 mt-2 flex-wrap">
-							{user?.badges?.map((badge, index) => {
+							{user?.badges?.map((badge) => {
 								const data = badgeData[badge.badgeId];
 								if (!data) return null;
 
 								return (
-									<img
-										key={index}
-										src={data.image}
-										alt={data.title}
-										className="w-[40px] h-[40px] cursor-pointer hover:scale-105 transition"
+									<button
+										type="button"
+										key={badge.badgeId}
 										onClick={() =>
 											setActiveBadge({
 												badge: data.image,
@@ -92,7 +91,13 @@ export const Profile = () => {
 												text: data.text,
 											})
 										}
-									/>
+									>
+										<img
+											src={data.image}
+											alt={data.title}
+											className="w-[40px] h-[40px] cursor-pointer hover:scale-105 transition"
+										/>
+									</button>
 								);
 							})}
 						</div>
@@ -105,8 +110,8 @@ export const Profile = () => {
 					<div className="bg-white p-6 rounded-lg shadow">
 						<h2 className="text-xl font-semibold mb-4">Hobbies</h2>
 						<ul className="list-disc list-inside space-y-2 text-gray-700">
-							{user?.hobbies?.map((hobby, index) => (
-								<li key={index}>{hobby}</li>
+							{user?.hobbies?.map((hobby) => (
+								<li key={hobby}>{hobby}</li>
 							))}
 						</ul>
 					</div>
@@ -114,14 +119,13 @@ export const Profile = () => {
 					<div className="bg-white p-6 rounded-lg shadow">
 						<h2 className="text-xl font-semibold mb-4">Skills/Languages</h2>
 						<ul className="list-disc list-inside space-y-2 text-gray-700">
-							{user?.skills?.map((skill, index) => (
-								<li key={index}>{skill}</li>
+							{user?.skills?.map((skill) => (
+								<li key={skill}>{skill}</li>
 							))}
 						</ul>
 					</div>
 				</div>
 
-				{/* Posts recentes */}
 				<div className="bg-white p-6 rounded-lg shadow">
 					<h2 className="text-2xl font-semibold mb-6 border-b border-gray-300 pb-2">
 						Posts Recentes
@@ -151,9 +155,9 @@ export const Profile = () => {
 								</Link>
 
 								<div className="mt-2 flex flex-wrap gap-2">
-									{post.tags.map((tag, i) => (
+									{post.tags.map((tag) => (
 										<span
-											key={i}
+											key={tag}
 											className="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full"
 										>
 											#{tag}
@@ -166,7 +170,6 @@ export const Profile = () => {
 				</div>
 			</div>
 
-			{/* Modal do Badge */}
 			{activeBadge && (
 				<Modal
 					badge={activeBadge.badge}

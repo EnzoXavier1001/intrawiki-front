@@ -1,21 +1,27 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
 import * as z from "zod";
-import { useUser } from "../../hooks/useUser";
+import ilustrationImg from "../../assets/Illustration.svg";
+import { useAuth } from "../../hooks/useAuth";
 
 const UserSchema = z.object({
-	email: z.string().nonempty("E-mail é obrigatório").email({
-		error: "E-mail inválido",
-	}),
-	password: z.string().nonempty("Senha é obrigatória"),
+	email: z
+		.email({
+			error: "E-mail inválido",
+		})
+		.nonempty("E-mail é obrigatório"),
+	password: z
+		.string()
+		.nonempty("Senha é obrigatória")
+		.min(8, "Senha deve conter no mínimo 8 caracteres"),
 });
 
 export type UserInput = z.infer<typeof UserSchema>;
 
 export const Login = () => {
-	const { handleLogin } = useUser();
+	const { handleLogin } = useAuth();
 	const navigate = useNavigate();
 
 	const {
@@ -26,21 +32,22 @@ export const Login = () => {
 		resolver: zodResolver(UserSchema),
 	});
 
-	async function handleUserLogin(userData: UserInput) {
-		const success = await handleLogin(userData);
+	async function handleUserLogin(user: UserInput) {
+		const userLogin = await handleLogin(user);
 
-		if (success) {
+		if (userLogin) {
 			toast.success("Usuário autenticado com sucesso!");
 			setTimeout(() => navigate("/"), 1000);
 		} else {
 			toast.error("Falha ao fazer login. Verifique suas credenciais.");
 		}
 	}
+
 	return (
-		<div className="flex h-screen">
-			<aside className="flex flex-col justify-center items-center w-1/2 bg-purple-700 text-white px-12">
+		<div className="justify-center flex h-screen flex-col md:flex-row justify-center">
+			<aside className="hidden md:flex flex-col justify-center items-center md:flex-1 bg-purple-700 text-white px-12">
 				<img
-					src="https://undraw.co/api/illustrations/0aeb89ab-5c5e-479a-a154-3b88a27347c7"
+					src={ilustrationImg}
 					alt="Ilustração de compartilhamento de conhecimento"
 					className="w-80 mb-10"
 				/>
@@ -52,7 +59,7 @@ export const Login = () => {
 				</p>
 			</aside>
 
-			<main className="flex flex-1 items-center justify-center">
+			<main className="flex md:flex-1 items-center justify-center px-12">
 				<div className="w-full max-w-md px-8">
 					<h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
 						Faça login na plataforma
@@ -107,9 +114,14 @@ export const Login = () => {
 						</div>
 					</form>
 
-					<p className="text-sm text-center text-gray-500 mt-4">
-						Esqueceu sua senha?{" "}
-						{/* <a className="text-purple-600 hover:underline">Recuperar acesso</a> */}
+					<p className="text-sm text-center text-gray-600 mt-2">
+						Não tem uma conta?{" "}
+						<Link
+							to="/register"
+							className="text-purple-700 font-medium hover:underline"
+						>
+							Cadastre-se
+						</Link>
 					</p>
 				</div>
 			</main>

@@ -1,12 +1,16 @@
 import { createContext, type ReactNode, useEffect, useState } from "react";
-import type { UserAuth } from "../@types/Auth";
 import type { IUser } from "../@types/User";
 import { authenticationUser } from "../api/user";
 
+interface UserAuth {
+	email: string;
+	password: string;
+}
+
 interface UserContextType {
 	user: IUser | null;
-	handleLogin: (data: UserAuth) => boolean;
-	handleLogout: () => void;
+	handleLogin: (data: UserAuth) => Promise<boolean>;
+	handleLogout: () => Promise<boolean>;
 }
 
 export const UserContext = createContext<UserContextType>(
@@ -35,6 +39,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			localStorage.setItem("showModal", JSON.stringify(true));
 
 			setUser(data.user);
+
 			return true;
 		} catch (error) {
 			console.error("Erro ao fazer login:", error);

@@ -59,11 +59,14 @@ export async function getPostByUserId(id: string): Promise<IPost[]> {
 	}
 }
 
-export async function searchPosts(category: string): Promise<IPost[]> {
+export async function searchPosts(
+	category?: string,
+	title?: string,
+): Promise<IPost[]> {
 	try {
 		const res = await axiosInstance.get(endpoints.searchPosts, {
 			...getAuthHeaders(),
-			params: { category },
+			params: { category, title },
 		});
 		return res.data as IPost[];
 	} catch (error) {

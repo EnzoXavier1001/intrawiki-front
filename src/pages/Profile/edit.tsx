@@ -2,8 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { type KeyboardEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import type { IUser } from "../../@types/User";
-import { useUser } from "../../hooks/useUser";
+import { useAuth } from "../../hooks/useAuth";
 
 export const userSchema = z.object({
 	name: z.string().min(2, "Nome muito curto"),
@@ -19,7 +18,7 @@ export const userSchema = z.object({
 export type UserData = z.infer<typeof userSchema>;
 
 export const UserEdit = () => {
-	const { user } = useUser();
+	const { user } = useAuth();
 
 	const [skillInput, setSkillInput] = useState("");
 	const [hobbyInput, setHobbyInput] = useState("");
@@ -147,9 +146,9 @@ export const UserEdit = () => {
 				<div>
 					<p className="text-sm font-medium text-gray-700 mb-1">Habilidades</p>
 					<div className="flex flex-wrap gap-2 mb-2">
-						{watchedSkills?.map((skill, index) => (
+						{watchedSkills?.map((skill) => (
 							<span
-								key={index}
+								key={skill}
 								className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
 							>
 								{skill}
@@ -175,13 +174,12 @@ export const UserEdit = () => {
 					/>
 				</div>
 
-				{/* Hobbies */}
 				<div>
 					<p className="text-sm font-medium text-gray-700 mb-1">Hobbies</p>
 					<div className="flex flex-wrap gap-2 mb-2">
-						{watchedHobbies?.map((hobby, index) => (
+						{watchedHobbies?.map((hobby) => (
 							<span
-								key={index}
+								key={hobby}
 								className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm flex items-center gap-2"
 							>
 								{hobby}

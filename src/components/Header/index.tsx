@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { useUser } from "../../hooks/useUser";
+import { useAuth } from "../../hooks/useAuth";
 
 export const Header = () => {
-	const { user, handleLogout } = useUser();
+	const { user, handleLogout } = useAuth();
 	const [showProfileMenu, setShowProfileMenu] = useState(false);
 	const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ export const Header = () => {
 						>
 							<img
 								src={user?.avatarUrl}
-								alt={user.name}
+								alt={user?.name}
 								className="w-full h-full object-cover"
 							/>
 						</button>
@@ -59,7 +59,7 @@ export const Header = () => {
 								<ul className="py-2 text-[15px] text-gray-700">
 									<li>
 										<Link
-											to={`/profile/${user._id}`}
+											to={`/profile/${user?._id}`}
 											className="block px-4 py-2 hover:bg-gray-100"
 										>
 											Perfil

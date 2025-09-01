@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 
-export const useUser = () => {
+export const useAuth = () => {
 	const { user, handleLogin, handleLogout } = useContext(UserContext);
 
 	return {

@@ -40,9 +40,9 @@ export const Sidebar = ({
 }: SidebarProps) => {
 	return (
 		<aside className="hidden lg:flex lg:col-span-2 flex-col space-y-2">
-			{categoryList.map((category, index) => (
+			{categoryList.map((category) => (
 				<button
-					key={category[index]}
+					key={category.text}
 					className={`${categorySelected === category.text ? " bg-purple-100 font-bold text-purple-700" : ""} cursor-pointer flex items-center gap-3 px-3 py-2 rounded-md text-gray-700 hover:bg-purple-100 hover:font-bold hover:text-purple-700 transition`}
 					type="button"
 					onClick={() => handleSearchByCategory(category.text)}
