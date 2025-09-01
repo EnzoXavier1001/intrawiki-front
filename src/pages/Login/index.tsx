@@ -7,11 +7,9 @@ import ilustrationImg from "../../assets/Illustration.svg";
 import { useAuth } from "../../hooks/useAuth";
 
 const UserSchema = z.object({
-	email: z
-		.email({
-			error: "E-mail inválido",
-		})
-		.nonempty("E-mail é obrigatório"),
+	email: z.email({
+		error: "E-mail inválido",
+	}),
 	password: z
 		.string()
 		.nonempty("Senha é obrigatória")

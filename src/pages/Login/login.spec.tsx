@@ -1,8 +1,8 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router";
-import { Login } from ".";
 import { AuthProvider } from "../../contexts/UserContext";
 import { Home } from "../Home";
+import { Login } from ".";
 
 describe("LoginPage", () => {
 	it("should render error message if email and password are empty", async () => {
@@ -15,7 +15,7 @@ describe("LoginPage", () => {
 		const button = screen.getByText("Entrar");
 		fireEvent.click(button);
 
-		expect(await screen.findByText("E-mail é obrigatório")).toBeInTheDocument();
+		expect(await screen.findByText("E-mail inválido")).toBeInTheDocument();
 		expect(await screen.findByText("Senha é obrigatória")).toBeInTheDocument();
 	});
 
@@ -65,7 +65,7 @@ describe("LoginPage", () => {
 		const button = screen.getByText("Entrar");
 		fireEvent.click(button);
 
-		const title = await screen.getByText("Usuário logado com sucesso!");
+		const title = await screen.findByText("Usuário autenticado com sucesso!");
 		expect(title).toBeInTheDocument();
 	});
 });
